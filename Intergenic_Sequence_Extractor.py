@@ -1,3 +1,5 @@
+# Reference sequence is read in and stored as file_data.
+
 reference = input('Name of File containing reference sequence (DNA/Protein) in FASTA format:')
 
 with open(reference, 'r') as f:
@@ -6,7 +8,9 @@ with open(reference, 'r') as f:
 file_data = "".join([i for i in file_data if i.isalpha()])
 file_data = file_data.upper()
 
-# Reference sequence is read in and stored as file_data.
+# APC1.2 PUL genes are stored as variables.
+# Variable name reflects gene order e.g. gene_1 is at first in the cluster.
+# Data is made continuous, upper case and special characters are excluded.
 
 # PUL1
 gene_4 = ''' 1 atggtgactg aaagtggcga gctttttatc tctcaagctt ttatagacat gtggatcgac
@@ -119,9 +123,8 @@ gene_2 = ''' 1 cccttgctta aatagccatt tatccagatc caattcattg tttttcacat tttccaactc
 gene_2 = "".join([i for i in gene_2 if i.isalpha()])
 gene_2 = gene_2.upper()
 
-# APC1.2 PUL genes are stored as variables.
-# Variable name reflects gene order e.g. gene_1 is at first in the cluster.
-# Data is made continuous, upper case and special characters are excluded.
+# Position in sequence is used to extract intergenic DNA which is appended to IGS list.
+# Order of genes and thus of intergenic DNA in cluster is shown.
 
 IGS = []
 
@@ -142,5 +145,3 @@ print(IGS[0])
 print(IGS[1])
 print(IGS[2])
 
-# Position in sequence is used to extract intergenic DNA which is appended to IGS list.
-# Order of genes and thus of intergenic DNA in cluster is shown.
