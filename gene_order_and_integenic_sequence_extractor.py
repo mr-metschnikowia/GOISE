@@ -1,3 +1,5 @@
+# does not support repeats that are 100% identical 
+
 def read_in_reference():
     global reference
     file_name = input('Name of file containing reference sequence (DNA/Protein) in FASTA format:')
