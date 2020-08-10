@@ -1,9 +1,15 @@
-# does not support repeats that are 100% identical 
+# does not support repeats that are 100% identical
+
+strain_name = input('Please input name of strain:')
+
+# stores name of strain
 
 def read_in_reference():
     global reference
-    file_name = input('Name of file containing reference sequence (DNA/Protein) in FASTA format:')
-    with open(file_name, 'r') as f:
+    folder = r'C:\Users\Rhino\PycharmProjects\sfam\genomes'
+    file = input('Name of file containing reference sequence (DNA/Protein) in FASTA format (start with \):')
+    path = folder + file
+    with open(path, 'r') as f:
         reference = f.read()
         reference = "".join([i for i in reference if i.isalpha()])
         reference = reference.upper()
@@ -50,7 +56,6 @@ def find_order():
     for location in locations:
         o = dictionary_2[location]
         order.append(o)
-    print(order)
 
 # function determines order of genes
 
@@ -70,7 +75,7 @@ for item in order:
 
 # gene sequences are ordered
 
-integenic_seqs = []
+intergenic_seqs = []
 x = 0
 y = 1
 
@@ -78,17 +83,30 @@ for i in range(len(ordered_seqs)-1):
     coords_1 = reference.find(ordered_seqs[x]) + len(ordered_seqs[x])
     coords_2 = reference.find(ordered_seqs[y])
     chunk = reference[coords_1:coords_2]
-    integenic_seqs.append(chunk)
+    intergenic_seqs.append(chunk)
     x += 1
     y += 1
 
 # intergenic sequences are extracted and stored
 
-for seq in integenic_seqs:
-    print(seq)
-    print(len(seq))
+array = []
+duo = []
+for seq in intergenic_seqs:
+    len_seq = str(len(seq))
+    duo.append(len_seq)
+    duo.append(seq)
+    array.append(duo)
+    duo = []
 
-# each intergenic sequence is returned, in order
-# length of each intergenic sequence is returned
+# list of intergenic sequences is iterated through
+# length of sequence + sequence are coupled and stored in array
 
+with open(r'C:\Users\Rhino\PycharmProjects\sfam\inter_seqs\inter_seqs.txt','a') as h:
+    h.write(strain_name + '\n')
+    order = '>'.join(order) + '\n'
+    h.write(order)
+    h.writelines([" ".join(i) + "\n" for i in array])
+    h.write('\n')
 
+# file inter_seqs.txt is created
+# file contains strain name, order of genes and a table: column 1 = sequence length, column 2 = sequence
