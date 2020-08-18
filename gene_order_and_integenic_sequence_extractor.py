@@ -1,12 +1,10 @@
 # does not support repeats that are 100% identical
-
-strain_name = input('\\277')
-
-# stores name of strain
+import os
+# importing dependancies
 
 def read_in_reference():
     global reference
-    path = r'C:\Users\Rhino\PycharmProjects\sfam\genomes\277.fna'
+    path = r'C:\Users\Rhino\PycharmProjects\sfam\genomes\apc1.2.fasta'
     with open(path, 'r') as f:
         reference = f.read()
         reference = "".join([i for i in reference if i.isalpha()])
@@ -24,31 +22,27 @@ gene_number = 9
 
 # records number of genes we are dealing with
 
-def read_in_gene():
-    global name_list
+def read_in_genes():
     global gene_list
-    global gene
-    folder = r'C:\Users\Rhino\PycharmProjects\sfam\pul_seqs'
-    gene_name = input('Name of gene:')
-    name_list.append(gene_name)
-    file = input('Name of file containing gene sequence (DNA/Protein) in FASTA format (start with \ ):')
-    path = folder + file
-    with open(path, 'r') as f:
-        gene = f.read()
-        gene = "".join([i for i in gene if i.isalpha()])
-        gene = gene.upper()
-        if gene[0:4] == 'ATG' or gene[0:4] == 'TAC':
-            orientation = '+'
-        elif gene[len(gene) - 3:len(gene)] == 'GTA' or gene[len(gene) - 3:len(gene)] == 'CAT':
-            orientation = '-'
-        else:
-            orientation = 'NA'
-        orient.append(orientation)
-        # orientation of each gene is obtained based on location of ATG/TAC start codon
-        gene_list.append(gene)
-
-# function reads in gene sequence, removes the descriptive line and all special characters
-# name of each gene is also recorded
+    global name_list
+    for file in os.listdir(r'C:\Users\Rhino\PycharmProjects\sfam\pul_seqs\apc1.2'):
+        name_list.append(file[0:4])
+        path = r'C:\Users\Rhino\PycharmProjects\sfam\pul_seqs\apc1.2\\' + file
+        with open(path, 'r') as f:
+            gene = f.read()
+            gene = "".join([i for i in gene if i.isalpha()])
+            gene = gene.upper()
+            if gene[0:3] == 'ATG' or gene[0:3] == 'TAC':
+                orientation = '+'
+            elif gene[len(gene) - 3:len(gene)] == 'GTA' or gene[len(gene) - 3:len(gene)] == 'CAT':
+                orientation = '-'
+            else:
+                orientation = 'NA'
+            orient.append(orientation)
+            # orientation of each gene is obtained based on location of ATG/TAC start codon
+            gene_list.append(gene)
+    # All genes in folder are read in and optimised
+    # Name of each gene is extracted from file name
 
 def find_order():
     global order
@@ -66,8 +60,7 @@ def find_order():
 # function determines sequence of genes
 
 read_in_reference()
-for i in range(gene_number):
-    read_in_gene()
+read_in_genes()
 dictionary_1 = dict(zip(name_list, gene_list))
 dictionary_3 = dict(zip(name_list,orient))
 # orientation is associated with gene name
@@ -118,11 +111,9 @@ for seq in intergenic_seqs:
 # length of sequence + sequence are coupled and stored in array
 # if an 'N' is found in the sequence, length = NA
 
-folder_2 = r'C:\Users\Rhino\PycharmProjects\sfam\inter_seqs'
-path_2 = folder_2 + strain_name + '.txt'
-
-with open(path_2,'a') as h:
-    h.write(strain_name + '\n')
+with open(r'C:\Users\Rhino\PycharmProjects\sfam\inter_seqs\apc1.2.txt','a') as h:
+    strain_name = 'apc1.2'
+    h.write(strain_name+ '\n')
     order = '>'.join(order) + '\n'
     h.write(order)
     ordered_orient = '>'.join(ordered_orient) + '\n'
@@ -131,4 +122,4 @@ with open(path_2,'a') as h:
     h.write('\n')
 
 # file inter_seqs.txt is created
-# file contains strain name, order of genes and a table: column 1 = sequence length, column 2 = sequence
+# file contains strain name, sequence of genes, orientation of each gene and a table: column 1 = sequence length, column 2 = sequence
